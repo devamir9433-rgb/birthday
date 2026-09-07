@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Happy Birthday Princess 👑</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    width: 100%;
+    height: 100%;
+  }
+  body {
+    min-height: 100dvh;
+    overflow: hidden;
+    background: linear-gradient(135deg,#ffdde1,#ee9ca7,#ffc3e1,#e0c3fc);
+    background-size: 400% 400%;
+    animation: bgshift 12s ease infinite;
+    font-family: 'Segoe UI', 'Trebuchet MS', sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding: 16px;
+  }
+  @keyframes bgshift {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+
+  /* ---------- GIFT SCREEN ---------- */
+  #giftScreen {
+    text-align:center;
+    z-index: 10;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    width: 100%;
+  }
+  #giftScreen.hidden {
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+  }
+  .gift-hint {
+    font-size: clamp(14px, 4.5vw, 20px);
+    color: #a3006e;
+    margin-bottom: 20px;
+    font-weight: bold;
+    animation: pulseText 1.5s ease-in-out infinite;
+    padding: 0 10px;
+  }
+  @keyframes pulseText {
+    0%,100% { opacity:1; }
+    50% { opacity:0.5; }
+  }
+  .gift-box {
+    font-size: clamp(80px, 25vw, 130px);
+    cursor: pointer;
+    display: inline-block;
+    animation: shake 1.4s ease-in-out infinite;
+    filter: drop-shadow(0 10px 20px rgba(200,50,120,0.4));
+    user-select: none;
+  }
+  .gift-box:hover { animation-duration: 0.5s; }
+  @keyframes shake {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    20% { transform: rotate(-8deg) scale(1.03); }
+    40% { transform: rotate(8deg) scale(1.03); }
+    60% { transform: rotate(-5deg) scale(1); }
+    80% { transform: rotate(5deg) scale(1); }
+  }
+  .gift-box.opening {
+    animation: openPop 0.5s ease forwards;
+  }
+  @keyframes openPop {
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.4) rotate(15deg); }
+    100% { transform: scale(0) rotate(30deg); opacity: 0; }
+  }
+
+  /* ---------- CARD SCREEN ---------- */
+  .card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    border-radius: 24px;
+    padding: clamp(24px, 6vw, 50px) clamp(20px, 6vw, 40px);
+    text-align:center;
+    box-shadow: 0 20px 60px rgba(200,50,120,0.35);
+    width: 100%;
+    max-width: 420px;
+    max-height: 90dvh;
+    overflow-y: auto;
+    z-index: 5;
+    border: 3px solid #ffb6d5;
+    position: absolute;
+    opacity: 0;
+    transform: scale(0.3) rotate(-15deg);
+    pointer-events: none;
+    transition: opacity 0.8s cubic-bezier(.34,1.56,.64,1), transform 0.8s cubic-bezier(.34,1.56,.64,1);
+  }
+  .card.show {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    pointer-events: auto;
+  }
+
+  .crown {
+    font-size: clamp(44px, 12vw, 70px);
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+
+  .title {
+    font-size: clamp(24px, 7vw, 34px);
+    color: #d6336c;
+    margin: 10px 0;
+    text-shadow: 2px 2px 0 #fff;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 5px #ff9ecf, 2px 2px 0 #fff; }
+    to   { text-shadow: 0 0 20px #ff5fa2, 2px 2px 0 #fff; }
+  }
+
+  .name {
+    font-size: clamp(30px, 9vw, 44px);
+    font-weight: bold;
+    color: #a3006e;
+    margin: 12px 0;
+    font-family: 'Brush Script MT', cursive;
+  }
+
+  .msg {
+    font-size: clamp(14px, 4vw, 18px);
+    color: #6a1b4d;
+    line-height: 1.7;
+    margin: 18px 0;
+  }
+
+  .date {
+    font-size: clamp(13px, 3.8vw, 16px);
+    color: #d6336c;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .cake {
+    font-size: clamp(36px, 10vw, 50px);
+    margin-top: 12px;
+    animation: wiggle 1.5s ease-in-out infinite;
+  }
+  @keyframes wiggle {
+    0%,100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  /* ---------- Floating hearts / balloons ---------- */
+  .heart {
+    position: fixed;
+    bottom: -50px;
+    font-size: 24px;
+    animation: floatUp linear infinite;
+    z-index: 1;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(-110vh) translateX(20px) rotate(360deg); opacity: 0; }
+  }
+
+  .balloon {
+    position: fixed;
+    bottom: -80px;
+    font-size: 40px;
+    animation: floatBalloon linear infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
+  @keyframes floatBalloon {
+    0% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-60vh) translateX(30px); }
+    100% { transform: translateY(-120vh) translateX(-10px); }
+  }
+
+  /* ---------- Burst particles ---------- */
+  .burst {
+    position: fixed;
+    font-size: 24px;
+    z-index: 8;
+    animation: burstOut 1.2s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes burstOut {
+    0% { transform: translate(0,0) scale(0.5); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.3); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="giftScreen">
+  <div class="gift-hint">🎁 Tap the gift to open your surprise 🎁</div>
+  <div class="gift-box" id="giftBox" onclick="openGift()">🎁</div>
+</div>
+
+<div class="card" id="card">
+  <div class="crown">👑</div>
+  <div class="title">Happy Birthday</div>
+  <div class="name">Princess 💕</div>
+  <div class="msg">
+    My dearest Princess,<br>
+    You are the most beautiful joy in my life.<br>
+    Today is as special as you are to me.<br>
+    May you always be happy, always be smiling, and may every wish of yours come true. 🌸<br><br>
+    <b>I love you, my jaan 💖</b>
+  </div>
+  <div class="cake">🎂🎉</div>
+  <div class="date">8th September — Your Special Day ✨</div>
+</div>
+
+<script>
+  const heartEmojis = ['💗','💖','💕','💓','🌸','✨'];
+  const balloonEmojis = ['🎈','🎈','🎈'];
+  let opened = false;
+
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerText = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+    heart.style.left = Math.random()*100 + 'vw';
+    heart.style.animationDuration = (4 + Math.random()*4) + 's';
+    heart.style.fontSize = (14 + Math.random()*16) + 'px';
+    document.body.appendChild(heart);
+    setTimeout(()=> heart.remove(), 9000);
+  }
+
+  function createBalloon() {
+    const balloon = document.createElement('div');
+    balloon.className = 'balloon';
+    balloon.innerText = balloonEmojis[Math.floor(Math.random()*balloonEmojis.length)];
+    balloon.style.left = Math.random()*100 + 'vw';
+    balloon.style.animationDuration = (6 + Math.random()*4) + 's';
+    balloon.style.fontSize = (28 + Math.random()*14) + 'px';
+    document.body.appendChild(balloon);
+    setTimeout(()=> balloon.remove(), 11000);
+  }
+
+  function burstFromCenter() {
+    const emojis = ['🎉','🎊','💗','💖','🎈','✨','🌸','💕'];
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const count = window.innerWidth < 500 ? 26 : 40;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'burst';
+      p.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 100 + Math.random()*220;
+      const tx = Math.cos(angle) * dist;
+      const ty = Math.sin(angle) * dist;
+      p.style.setProperty('--tx', tx + 'px');
+      p.style.setProperty('--ty', ty + 'px');
+      p.style.left = cx + 'px';
+      p.style.top = cy + 'px';
+      p.style.fontSize = (16 + Math.random()*14) + 'px';
+      document.body.appendChild(p);
+      setTimeout(()=> p.remove(), 1300);
+    }
+  }
+
+  function openGift() {
+    if (opened) return;
+    opened = true;
+
+    const giftBox = document.getElementById('giftBox');
+    const giftScreen = document.getElementById('giftScreen');
+    const card = document.getElementById('card');
+
+    giftBox.classList.add('opening');
+    burstFromCenter();
+
+    setInterval(createHeart, 400);
+    setInterval(createBalloon, 1200);
+
+    setTimeout(() => {
+      giftScreen.classList.add('hidden');
+    }, 400);
+
+    setTimeout(() => {
+      card.classList.add('show');
+    }, 900);
+  }
+</script>
+
+</body>
+</html>
